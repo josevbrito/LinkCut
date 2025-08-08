@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { nanoid } from 'nanoid';
+import cors from 'cors';
 
 const app = express();
 const PORT = 3000;
@@ -7,13 +8,14 @@ const PORT = 3000;
 // In-memory store for URLs.
 const urlStore = new Map<string, string>();
 
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// A simple welcome route
-app.get('/', (req: Request, res: Response) => {
-    res.json({ message: 'Welcome to the URL Shortener API!', instructions: 'Use POST /shorten to shorten a URL or GET /<shortCode> to redirect.' });
-});
+// Enable CORS for all routes
+app.use(cors());
 
 // Endpoint to shorten a URL
 app.post('/shorten', (req: Request, res: Response) => {
